@@ -20,8 +20,6 @@ type (
 
 	// redisConf is logger configuration struct.
 	redisConf struct {
-		Host         string
-		Port         string
 		IdleTimeout  time.Duration `mapstructure:"idle_timeout"`
 		ReadTimeout  time.Duration `mapstructure:"read_timeout"`
 		WriteTimeout time.Duration `mapstructure:"write_timeout"`
@@ -58,8 +56,8 @@ func (b *Bundle) Build(builder *di.Builder) error {
 
 			options := &redis.Options{
 				Addr: net.JoinHostPort(
-					conf.Host,
-					conf.Port,
+					cnf.GetString("redis.host"),
+					cnf.GetString("redis.port"),
 				),
 				IdleTimeout:  conf.IdleTimeout,
 				ReadTimeout:  conf.ReadTimeout,
