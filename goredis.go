@@ -59,6 +59,8 @@ func (b *Bundle) Build(builder *di.Builder) error {
 					cnf.GetString("redis.host"),
 					cnf.GetString("redis.port"),
 				),
+				DB:           cnf.GetInt("redis.db"),
+				MaxRetries:   cnf.GetInt("redis.max_retries"),
 				IdleTimeout:  conf.IdleTimeout,
 				ReadTimeout:  conf.ReadTimeout,
 				WriteTimeout: conf.WriteTimeout,
