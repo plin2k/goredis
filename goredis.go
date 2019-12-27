@@ -3,8 +3,8 @@ package goredis
 
 import (
 	"errors"
-	"net"
-	"time"
+	"fmt"
+	"strings"
 
 	"github.com/go-redis/redis"
 	"github.com/gozix/viper/v2"
@@ -17,13 +17,6 @@ type (
 
 	// Pool is type alias of redis.Client
 	Pool = redis.Client
-
-	// redisConf is logger configuration struct.
-	redisConf struct {
-		IdleTimeout  time.Duration `mapstructure:"idle_timeout"`
-		ReadTimeout  time.Duration `mapstructure:"read_timeout"`
-		WriteTimeout time.Duration `mapstructure:"write_timeout"`
-	}
 )
 
 // BundleName is default definition name.
@@ -44,41 +37,55 @@ func (b *Bundle) Build(builder *di.Builder) error {
 	return builder.Add(di.Def{
 		Name: BundleName,
 		Build: func(ctn di.Container) (_ interface{}, err error) {
-			var cnf *viper.Viper
-			if err = ctn.Fill(viper.BundleName, &cnf); err != nil {
+			var cfg *viper.Viper
+			if err = ctn.Fill(viper.BundleName, &cfg); err != nil {
 				return nil, errors.New("can't get config from container")
 			}
 
-			var conf redisConf
-			if err = cnf.UnmarshalKey("redis", &conf); err != nil {
-				return nil, err
+			// use this is hack, not UnmarshalKey
+			// see https://github.com/spf13/viper/issues/188
+			var (
+				keys = cfg.Sub(configKey).AllKeys()
+				conf = make(Configs, len(keys))
+			)
+
+			for _, key := range keys {
+				var name = strings.Split(key, ".")[0]
+				if _, ok := conf[name]; ok {
+					continue
+				}
+
+				var suffix = fmt.Sprintf("%s.%s.", configKey, name)
+
+				cfg.SetDefault(suffix+"port", "6379")
+
+				var c = Config{
+					Host:         cfg.GetString(suffix + "host"),
+					Port:         cfg.GetString(suffix + "port"),
+					DB:           cfg.GetInt(suffix + "db"),
+					Password:     cfg.GetString(suffix + "password"),
+					MaxRetries:   cfg.GetInt(suffix + "max_retries"),
+					IdleTimeout:  cfg.GetDuration(suffix + "idle_timeout"),
+					ReadTimeout:  cfg.GetDuration(suffix + "read_timeout"),
+					WriteTimeout: cfg.GetDuration(suffix + "write_timeout"),
+				}
+
+				// validating
+				if c.Host == "" {
+					return nil, errors.New(suffix + "host should be set")
+				}
+
+				if c.MaxRetries < 0 {
+					return nil, errors.New(suffix + "max_retries should be greater or equal to 0")
+				}
+
+				conf[name] = c
 			}
 
-			options := &redis.Options{
-				Addr: net.JoinHostPort(
-					cnf.GetString("redis.host"),
-					cnf.GetString("redis.port"),
-				),
-				DB:           cnf.GetInt("redis.db"),
-				MaxRetries:   cnf.GetInt("redis.max_retries"),
-				IdleTimeout:  conf.IdleTimeout,
-				ReadTimeout:  conf.ReadTimeout,
-				WriteTimeout: conf.WriteTimeout,
-			}
-
-			var client *redis.Client
-			if client = redis.NewClient(options); client == nil {
-				return nil, err
-			}
-
-			if _, err = client.Ping().Result(); err != nil {
-				return nil, err
-			}
-
-			return client, nil
+			return NewRegistry(conf), nil
 		},
 		Close: func(obj interface{}) error {
-			return obj.(*redis.Client).Close()
+			return obj.(*Registry).Close()
 		},
 	})
 }
