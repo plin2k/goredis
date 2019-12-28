@@ -75,6 +75,10 @@ func (b *Bundle) Build(builder *di.Builder) error {
 					return nil, errors.New(suffix + "host should be set")
 				}
 
+				if c.DB < 0 {
+					return nil, errors.New(suffix + "db should be greater or equal to 0")
+				}
+
 				if c.MaxRetries < 0 {
 					return nil, errors.New(suffix + "max_retries should be greater or equal to 0")
 				}
