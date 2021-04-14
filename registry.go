@@ -106,7 +106,7 @@ func (r *Registry) ConnectionWithName(name string) (_ *redis.Client, err error) 
 		return nil, err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	var ctx, cancel = context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
 	if _, err = client.Ping(ctx).Result(); err != nil {
