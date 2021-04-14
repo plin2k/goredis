@@ -1,4 +1,4 @@
-module github.com/gozix/goredis/v2
+module github.com/gozix/goredis/v3
 
 go 1.16
 
