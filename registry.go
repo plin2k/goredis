@@ -2,12 +2,13 @@
 package goredis
 
 import (
+	"context"
 	"errors"
 	"net"
 	"sync"
 	"time"
 
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 )
 
 // DEFAULT is default connection name.
@@ -105,7 +106,10 @@ func (r *Registry) ConnectionWithName(name string) (_ *redis.Client, err error) 
 		return nil, err
 	}
 
-	if _, err = client.Ping().Result(); err != nil {
+	var ctx, cancel = context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	if _, err = client.Ping(ctx).Result(); err != nil {
 		return nil, err
 	}
 
