@@ -100,6 +100,7 @@ func (r *Registry) ConnectionWithName(name string) (_ *redis.Client, err error) 
 		IdleTimeout:  cfg.IdleTimeout,
 		ReadTimeout:  cfg.ReadTimeout,
 		WriteTimeout: cfg.WriteTimeout,
+		Password:     cfg.Password,
 	}
 
 	if client = redis.NewClient(options); client == nil {
