@@ -13,6 +13,7 @@
       "host": "127.0.0.1",
       "port": "6379",
       "db": 0,
+      "username": "someuser",
       "password": "somepassword",
       "max_retiries": 2,
       "read_timeout": "2s",
@@ -22,5 +23,6 @@
   }
 }
 ```
+
 "password" field is optional and ignored if empty
 "db" field is optional. Default is 0

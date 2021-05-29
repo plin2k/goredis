@@ -23,6 +23,7 @@ type (
 		Host         string        `json:"host"`
 		Port         string        `json:"port"`
 		DB           int           `json:"db"`
+		Username     string        `json:"username"`
 		Password     string        `json:"password"`
 		MaxRetries   int           `json:"max_retries"`
 		IdleTimeout  time.Duration `json:"idle_timeout"`
@@ -100,6 +101,7 @@ func (r *Registry) ConnectionWithName(name string) (_ *redis.Client, err error) 
 		IdleTimeout:  cfg.IdleTimeout,
 		ReadTimeout:  cfg.ReadTimeout,
 		WriteTimeout: cfg.WriteTimeout,
+		Username:     cfg.Username,
 		Password:     cfg.Password,
 	}
 
