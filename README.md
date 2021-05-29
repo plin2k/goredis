@@ -24,5 +24,6 @@
 }
 ```
 
+"username" field is optional and ignored if empty
 "password" field is optional and ignored if empty
 "db" field is optional. Default is 0
