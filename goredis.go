@@ -63,6 +63,7 @@ func (b *Bundle) Build(builder *di.Builder) error {
 					Host:         cfg.GetString(suffix + "host"),
 					Port:         cfg.GetString(suffix + "port"),
 					DB:           cfg.GetInt(suffix + "db"),
+					Username:     cfg.GetString(suffix + "username"),
 					Password:     cfg.GetString(suffix + "password"),
 					MaxRetries:   cfg.GetInt(suffix + "max_retries"),
 					IdleTimeout:  cfg.GetDuration(suffix + "idle_timeout"),
