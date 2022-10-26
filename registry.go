@@ -11,11 +11,13 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-// DEFAULT is default connection name.
-const DEFAULT = "default"
+const (
+	// DEFAULT is default connection name.
+	DEFAULT = "default"
 
-// ConfigKey is root config key.
-const configKey = "redis"
+	// configKey is root config key.
+	configKey = "redis"
+)
 
 type (
 	// Config is registry configuration item.
