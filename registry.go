@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 )
 
 const (
@@ -98,13 +98,13 @@ func (r *Registry) ConnectionWithName(name string) (_ *redis.Client, err error) 
 			cfg.Host,
 			cfg.Port,
 		),
-		DB:           cfg.DB,
-		MaxRetries:   cfg.MaxRetries,
-		IdleTimeout:  cfg.IdleTimeout,
-		ReadTimeout:  cfg.ReadTimeout,
-		WriteTimeout: cfg.WriteTimeout,
-		Username:     cfg.Username,
-		Password:     cfg.Password,
+		DB:              cfg.DB,
+		MaxRetries:      cfg.MaxRetries,
+		ConnMaxIdleTime: cfg.IdleTimeout,
+		ReadTimeout:     cfg.ReadTimeout,
+		WriteTimeout:    cfg.WriteTimeout,
+		Username:        cfg.Username,
+		Password:        cfg.Password,
 	}
 
 	if client = redis.NewClient(options); client == nil {
