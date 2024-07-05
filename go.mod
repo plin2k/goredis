@@ -1,4 +1,4 @@
-module github.com/gozix/goredis/v5
+module github.com/plin2k/goredis/v5
 
 go 1.18
 
