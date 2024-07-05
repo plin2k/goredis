@@ -26,7 +26,7 @@ The bundle provide a GoRedis integration to GoZix application.
 ## Installation
 
 ```shell
-go get github.com/gozix/goredis/v4
+go get github.com/gozix/goredis/v5
 ```
 
 ## Dependencies
