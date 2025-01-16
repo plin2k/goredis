@@ -66,15 +66,16 @@ func (b *Bundle) provideRegistry(cfg *viper.Viper) (*Registry, func() error, err
 		cfg.SetDefault(suffix+"port", "6379")
 
 		var c = Config{
-			Host:         cfg.GetString(suffix + "host"),
-			Port:         cfg.GetString(suffix + "port"),
-			DB:           cfg.GetInt(suffix + "db"),
-			Username:     cfg.GetString(suffix + "username"),
-			Password:     cfg.GetString(suffix + "password"),
-			MaxRetries:   cfg.GetInt(suffix + "max_retries"),
-			IdleTimeout:  cfg.GetDuration(suffix + "idle_timeout"),
-			ReadTimeout:  cfg.GetDuration(suffix + "read_timeout"),
-			WriteTimeout: cfg.GetDuration(suffix + "write_timeout"),
+			Host:             cfg.GetString(suffix + "host"),
+			Port:             cfg.GetString(suffix + "port"),
+			DB:               cfg.GetInt(suffix + "db"),
+			Username:         cfg.GetString(suffix + "username"),
+			Password:         cfg.GetString(suffix + "password"),
+			MaxRetries:       cfg.GetInt(suffix + "max_retries"),
+			IdleTimeout:      cfg.GetDuration(suffix + "idle_timeout"),
+			ReadTimeout:      cfg.GetDuration(suffix + "read_timeout"),
+			WriteTimeout:     cfg.GetDuration(suffix + "write_timeout"),
+			DisableIndentity: cfg.GetBool(suffix + "disable_indentity"),
 		}
 
 		// validating

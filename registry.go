@@ -22,15 +22,16 @@ const (
 type (
 	// Config is registry configuration item.
 	Config struct {
-		Host         string        `json:"host"`
-		Port         string        `json:"port"`
-		DB           int           `json:"db"`
-		Username     string        `json:"username"`
-		Password     string        `json:"password"`
-		MaxRetries   int           `json:"max_retries"`
-		IdleTimeout  time.Duration `json:"idle_timeout"`
-		ReadTimeout  time.Duration `json:"read_timeout"`
-		WriteTimeout time.Duration `json:"write_timeout"`
+		Host             string        `json:"host"`
+		Port             string        `json:"port"`
+		DB               int           `json:"db"`
+		Username         string        `json:"username"`
+		Password         string        `json:"password"`
+		MaxRetries       int           `json:"max_retries"`
+		IdleTimeout      time.Duration `json:"idle_timeout"`
+		ReadTimeout      time.Duration `json:"read_timeout"`
+		WriteTimeout     time.Duration `json:"write_timeout"`
+		DisableIndentity bool          `json:"disable_indentity"`
 	}
 
 	// Configs is registry configurations.
@@ -98,13 +99,14 @@ func (r *Registry) ConnectionWithName(name string) (_ *redis.Client, err error) 
 			cfg.Host,
 			cfg.Port,
 		),
-		DB:              cfg.DB,
-		MaxRetries:      cfg.MaxRetries,
-		ConnMaxIdleTime: cfg.IdleTimeout,
-		ReadTimeout:     cfg.ReadTimeout,
-		WriteTimeout:    cfg.WriteTimeout,
-		Username:        cfg.Username,
-		Password:        cfg.Password,
+		DB:               cfg.DB,
+		MaxRetries:       cfg.MaxRetries,
+		ConnMaxIdleTime:  cfg.IdleTimeout,
+		ReadTimeout:      cfg.ReadTimeout,
+		WriteTimeout:     cfg.WriteTimeout,
+		Username:         cfg.Username,
+		Password:         cfg.Password,
+		DisableIndentity: cfg.DisableIndentity,
 	}
 
 	if client = redis.NewClient(options); client == nil {
